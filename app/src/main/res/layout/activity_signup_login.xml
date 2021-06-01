@@ -6,4 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".SignupLoginActivity">
 
+    <FrameLayout
+        android:id="@+id/frame_layout_signup_login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

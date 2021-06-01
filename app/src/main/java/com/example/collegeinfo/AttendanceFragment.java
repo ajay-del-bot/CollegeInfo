@@ -14,33 +14,36 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 
 public class AttendanceFragment extends Fragment {
 
     private FirebaseRemoteConfig firebaseRemoteConfig;
-    TextView textview;
+    private TextView textViewAttendance;
+
     public AttendanceFragment() {
         // Required empty public constructor
     }
-
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_attendance, container, false);
+        View view =  inflater.inflate(R.layout.fragment_attendance, container, false);
+        setView(view);
         setFirebaseRemoteConfig();
         fetchFirebaseRemoteConfig();
         return view;
     }
 
     private void setView(View view){
+        textViewAttendance = view.findViewById(R.id.textViewAttendance);
 
     }
 
-    private void setFirebaseRemoteConfig(){
+    public void setFirebaseRemoteConfig() {
         firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
         FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
                 .setMinimumFetchIntervalInSeconds(1000)
@@ -55,12 +58,13 @@ public class AttendanceFragment extends Fragment {
         firebaseRemoteConfig.setDefaultsAsync(defaults);
 
         firebaseRemoteConfig.fetchAndActivate()
-                .addOnCompleteListener(task ->{
+                .addOnCompleteListener(task -> {
                    if(task.isSuccessful()){
-
+                        textViewAttendance.setText("Attendance: " + firebaseRemoteConfig
+                        .getLong("ATTENDANCE"));
                    }
                    else{
-                       Toast.makeText(getContext(), "FireBase Fetch Error", Toast.LENGTH_SHORT).show();
+                       Toast.makeText(getContext(), "Firebase error", Toast.LENGTH_LONG).show();
                    }
                 });
     }

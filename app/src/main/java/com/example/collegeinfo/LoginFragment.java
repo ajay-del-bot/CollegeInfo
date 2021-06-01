@@ -39,9 +39,9 @@ public class LoginFragment extends Fragment {
     }
 
     private void setView(View view) {
-        editTextEmail = view.findViewById(R.id.editTextEmailAddressLogin);
-        editTextPassword = view.findViewById(R.id.editTextPasswordLogin);
-        buttonLogin = view.findViewById(R.id.buttonLogin);
+        editTextEmail = view.findViewById(R.id.login_email);
+        editTextPassword = view.findViewById(R.id.login_password);
+        buttonLogin = view.findViewById(R.id.button2);
         textViewSignup = view.findViewById(R.id.textViewSignup);
     }
 

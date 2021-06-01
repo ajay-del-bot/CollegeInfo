@@ -2,6 +2,8 @@ package com.example.collegeinfo;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,21 +14,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.collegeinfo.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SignupFragment extends Fragment {
 
-    private EditText editTextEmail;
-    private EditText editTextCreatePassword;
-    private EditText editTextConfirmPassword;
-    private Button buttonSignup;
+    private EditText email, password, confirmpassword;
+    private EditText name;
+    private Button btnSignUp;
     private TextView textViewLogin;
 
-    private String email;
-    private String createPassword;
-    private String confirmPassword;
+    private String s_name, s_email, s_password, s_confirmpassword;
 
     private FirebaseAuth mAuth;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,51 +40,60 @@ public class SignupFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
 
         setView(view);
-        setClickListeners();
         return view;
     }
 
-    private void setView(View view) {
-        editTextEmail = view.findViewById(R.id.editTextTextEmailAddress);
-        editTextCreatePassword = view.findViewById(R.id.editTextCreatePassword);
-        editTextConfirmPassword = view.findViewById(R.id.editTextTextConfirmPassword);
-        buttonSignup = view.findViewById(R.id.buttonSignup);
+    private void setView(View view){
+        name = view.findViewById(R.id.name);
+        email = view.findViewById(R.id.email);
+        password = view.findViewById(R.id.password);
+        confirmpassword = view.findViewById(R.id.confirmpassword);
+        btnSignUp = view.findViewById(R.id.button2);
         textViewLogin = view.findViewById(R.id.textViewLogin);
-    }
 
-    private void setClickListeners() {
-        buttonSignup.setOnClickListener(view -> {
-            email = editTextEmail.getText().toString();
-            createPassword = editTextCreatePassword.getText().toString().trim();
-            confirmPassword = editTextConfirmPassword.getText().toString().trim();
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                s_name = name.getText().toString();
+                s_email = email.getText().toString();
+                s_password = password.getText().toString();
+                s_confirmpassword = confirmpassword.getText().toString();
 
-            if(createPassword.equals(confirmPassword)) {
-                addUser();
-            }
-            else {
-                Toast.makeText(getContext(), "Passwords do not match!",
-                        Toast.LENGTH_LONG).show();
+                if(s_password.equals(s_confirmpassword)){
+                    addUser();
+                }
+                else{
+                    Toast.makeText(getContext(), "Passwords do not match", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
-        textViewLogin.setOnClickListener(view -> {
-            assert getFragmentManager() != null;
-            getFragmentManager().beginTransaction().replace(R.id.frame_layout_signup_login,
-                    new LoginFragment()).commit();
+        textViewLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().replace(R.id.frame_layout_signup_login,
+                        new LoginFragment()).commit();
+            }
         });
+
+
+
     }
 
     private void addUser() {
-        mAuth.createUserWithEmailAndPassword(email, createPassword)
-                .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()) {
-                        Intent intent = new Intent(getContext(), MainActivity.class);
-                        startActivity(intent);
-                    }
-                    else {
-                        Toast.makeText(getContext(),
-                                "Sign up unsuccessful!", Toast.LENGTH_LONG).show();
+        mAuth.createUserWithEmailAndPassword(s_email, s_password)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(getContext(), "Successfully Registered", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getContext(), MainActivity.class));
+                        }
+                        else{
+                            Toast.makeText(getContext(), "Registration failed"+task.getException(), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
     }
+
 }

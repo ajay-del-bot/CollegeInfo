@@ -42,7 +42,7 @@ public class SyllabusFragment extends Fragment {
 
         try {
             String url ="";
-            String pdf ="https://firebasestorage.googleapis.com/v0/b/collegeinfoapp-37d86.appspot.com/o/Android%20IoT%20Dashboard%20Project.pdf?alt=media&token=a2a8b1c8-b06a-4c5f-9d1e-47f5793f4c04";
+            String pdf ="https://firebasestorage.googleapis.com/v0/b/collegeinfo-e6697.appspot.com/o/Internship%20Offer%20Letter%20-%20Ajay%20Rao%5B2424%5D.pdf?alt=media&token=a3750e7a-634c-4c9f-9ac6-c3550b2a404e";
             url= URLEncoder.encode(pdf,"UTF-8");
             webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + url);
         }

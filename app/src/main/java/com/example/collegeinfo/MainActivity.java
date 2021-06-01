@@ -67,9 +67,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.syllabus :
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main,
                         new SyllabusFragment()).commit();
+                    break;
+
+            case R.id.logout: mAuth.signOut();
+                                finish();
 
             case R.id.attendance: getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_main,
-                    new AttendanceFragment()).commit();
+                   new AttendanceFragment()).commit();
+                    break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
